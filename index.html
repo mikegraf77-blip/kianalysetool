@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI Starter KIT - Analysetool</title>
+    <style>
+        :root {
+            --primary: #20B2AA;
+            --primary-light: #4DD0E1;
+            --primary-dark: #0A8C86;
+            --secondary: #FFFFFF;
+            --background: #F5F8FA;
+            --text: #333333;
+            --text-light: #777777;
+            --border: #E0E0E0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 10px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .card h3 {
+            margin: 25px 0 15px;
+            color: var(--primary-dark);
+        }
+        
+        .phases {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .phase {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .phase-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .question-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .question label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .question input[type="text"],
+        .question textarea,
+        .question select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .question textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+        }
+        
+        button.secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        button.secondary:hover {
+            background: #f0f0f0;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .result-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .use-case {
+            background: rgba(77, 208, 225, 0.1);
+            border: 1px solid var(--primary-light);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .use-case h4 {
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+        
+        .rating {
+            display: flex;
+            margin: 10px 0;
+        }
+        
+        .rating span {
+            background: var(--primary-light);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        table th {
+            background: rgba(77, 208, 225, 0.1);
+            color: var(--primary-dark);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .phase {
+                min-width: 100%;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="data:image/png;base64,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" alt="Logo" class="logo">
+            <h1>KI Starter KIT - Analysetool</h1>
+            <p>Systematische Identifikation und Planung von KI-Use-Cases für Ihr Unternehmen</p>
+        </header>
+        
+        <div id="phase-selector">
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+            
+            <div class="phases">
+                <div class="phase" onclick="showPhase('interview')" id="phase-interview-btn">
+                    <div class="phase-number">1</div>
+                    <h3>Interview-Phase</h3>
+                    <p>Kontext verstehen & KI-Potenziale identifizieren</p>
+                </div>
+                <div class="phase" onclick="showPhase('results')" id="phase-results-btn">
+                    <div class="phase-number">2</div>
+                    <h3>Zwischenergebnisse</h3>
+                    <p>Identifizierte Use Cases und Potenziale</p>
+                </div>
+                <div class="phase" onclick="showPhase('planning')" id="phase-planning-btn">
+                    <div class="phase-number">3</div>
+                    <h3>Planungsphase</h3>
+                    <p>Use Case auswählen & Umsetzung planen</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="phase-interview" class="phase-content">
+            <div class="card">
+                <h2>Phase 1 + 2: Interview & KI-Potenziale</h2>
+                <p>Beantworten Sie die folgenden Fragen, um Ihr Unternehmen und potenzielle KI-Anwendungsfälle zu identifizieren.</p>
+                
+                <form id="interview-form">
+                    <div class="question-group">
+                        <h3>Kontext & Verständnis</h3>
+                        
+                        <div class="question">
+                            <label for="business">1. Was genau bietet Ihr Unternehmen an – in einem Satz?</label>
+                            <textarea id="business" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="customers">2. Wer sind Ihre typischen Kunden?</label>
+                            <textarea id="customers" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="acquisition">3. Wie gewinnen Sie aktuell neue Kunden?</label>
+                            <textarea id="acquisition" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="bottlenecks">4. Was sind aktuell Ihre größten operativen Engpässe?</label>
+                            <textarea id="bottlenecks" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="manual">5. Welche Prozesse laufen noch manuell oder sind besonders zeitintensiv?</label>
+                            <textarea id="manual" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="experience">6. Haben Sie schon mit Automatisierung, KI oder Tools experimentiert?</label>
+                            <textarea id="experience" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="question-group">
+                        <h3>Marketing & Vertrieb</h3>
+                        
+                        <div class="question">
+                            <label for="sales">7. Wie wird bei Ihnen aktuell verkauft? Persönlich, digital, hybrid?</label>
+                            <textarea id="sales" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="content">8. Wie schreiben Sie aktuell E-Mails, Angebote, Newsletter?</label>
+                            <textarea id="content" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="feedback">9. Wie wird Kundenfeedback gesammelt und ausgewertet?</label>
+                            <textarea id="feedback" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="leads">10. Haben Sie ungenutzte Leads oder viele Nachfassaktionen?</label>
+                            <textarea id="leads" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="question-group">
+                        <h3>Kundensupport / Kommunikation</h3>
+                        
+                        <div class="question">
+                            <label for="recurring">11. Wie gehen Sie mit wiederkehrenden Kundenfragen um?</label>
+                            <textarea id="recurring" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="helpdesk">12. Gibt es einen Helpdesk / FAQ / Support-System?</label>
+                            <textarea id="helpdesk" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="question-group">
+                        <h3>Interne Prozesse</h3>
+                        
+                        <div class="question">
+                            <label for="data">13. Welche Daten müssen regelmäßig ausgewertet werden?</label>
+                            <textarea id="data" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="reports">14. Gibt es standardisierte Berichte, die manuell erstellt werden?</label>
+                            <textarea id="reports" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="knowledge">15. Wie wird Wissen im Unternehmen dokumentiert und genutzt?</label>
+                            <textarea id="knowledge" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button type="button" onclick="resetForm('interview-form')">Zurücksetzen</button>
+                        <button type="button" onclick="submitInterview()">Interview abschließen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="phase-results" class="phase-content hidden">
+            <div class="card">
+                <h2>Identifizierte KI-Potenziale</h2>
+                <p>Basierend auf Ihren Antworten wurden folgende KI-Potenziale und Use Cases identifiziert:</p>
+                
+                <div id="results-content">
+                    <!-- Results will be inserted here -->
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" onclick="showPhase('interview')">Zurück zum Interview</button>
+                    <button type="button" onclick="showPhase('planning')">Zur Planungsphase</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="phase-planning" class="phase-content hidden">
+            <div class="card">
+                <h2>Phase 3: Auswahl & Planung</h2>
+                <p>Basierend auf den identifizierten Use Cases, planen Sie nun die konkrete Umsetzung.</p>
+                
+                <form id="planning-form">
+                    <div class="question-group">
+                        <div class="question">
+                            <label for="promising">16. Welche dieser Ideen erscheint Ihnen am vielversprechendsten?</label>
+                            <select id="promising" required>
+                                <option value="" selected disabled>Bitte auswählen...</option>
+                                <!-- Options will be filled dynamically -->
+                            </select>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="result">17. Was wäre ein „sichtbares Ergebnis", das Sie in 30 Tagen erreichen wollen?</label>
+                            <textarea id="result" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="support">18. Wer könnte intern bei der Umsetzung unterstützen?</label>
+                            <textarea id="support" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="compatibility">19. Gibt es Tools oder Systeme, mit denen die Lösung kompatibel sein muss?</label>
+                            <textarea id="compatibility" required></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label for="success">20. Was wäre für Sie ein erfolgreicher Abschluss des Starter-Kits?</label>
+                            <textarea id="success" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button type="button" onclick="showPhase('results')">Zurück zu den Ergebnissen</button>
+                        <button type="button" onclick="generateReport()">Bericht erstellen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="final-report" class="phase-content hidden">
+            <div class="card">
+                <h2>KI Starter KIT - Abschlussbericht</h2>
+                
+                <div id="report-content">
+                    <!-- Report will be inserted here -->
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" onclick="showPhase('planning')">Zurück zur Planung</button>
+                    <button type="button" onclick="downloadPDF()">Als PDF herunterladen</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>KI Starter KIT - Analysetool © 2025</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Globals
+        let currentPhase = 'interview';
+        let useCases = [];
+        let companyName = "";
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Disable phases that shouldn't be accessible yet
+            document.getElementById('phase-results-btn').style.opacity = '0.5';
+            document.getElementById('phase-planning-btn').style.opacity = '0.5';
+            
+            // Show first phase
+            showPhase('interview');
+            
+            // Set progress
+            updateProgress(33);
+        });
+        
+        // Show selected phase
+        function showPhase(phase) {
+            // Check if phase is accessible
+            if ((phase === 'results' || phase === 'planning') && useCases.length === 0) {
+                alert('Bitte schließen Sie zuerst das Interview ab.');
+                return;
+            }
+            
+            if (phase === 'planning' && document.getElementById('promising').options.length <= 1) {
+                populateUseCaseDropdown();
+            }
+            
+            // Hide all phases
+            document.querySelectorAll('.phase-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Show selected phase
+            document.getElementById('phase-' + phase).classList.remove('hidden');
+            
+            // Update current phase
+            currentPhase = phase;
+            
+            // Update progress
+            if (phase === 'interview') updateProgress(33);
+            if (phase === 'results') updateProgress(66);
+            if (phase === 'planning') updateProgress(85);
+            if (phase === 'final-report') updateProgress(100);
+        }
+        
+        // Update progress bar
+        function updateProgress(percent) {
+            document.getElementById('progress-bar').style.width = percent + '%';
+        }
+        
+        // Reset form
+        function resetForm(formId) {
+            if (confirm('Möchten Sie wirklich alle eingegebenen Daten zurücksetzen?')) {
+                document.getElementById(formId).reset();
+            }
+        }
+        
+        // Submit interview
+        function submitInterview() {
+            // Check if form is valid
+            const form = document.getElementById('interview-form');
+            const inputs = form.querySelectorAll('textarea');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.style.borderColor = 'red';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Bitte füllen Sie alle Felder aus.');
+                return;
+            }
+            
+            // Get company name
+            companyName = document.getElementById('business').value;
+            
+            // Analyze answers and generate use cases
+            analyzeAnswers();
+            
+            // Enable results and planning phases
+            document.getElementById('phase-results-btn').style.opacity = '1';
+            document.getElementById('phase-planning-btn').style.opacity = '1';
+            
+            // Show results phase
+            showPhase('results');
+        }
+        
+        // Analyze answers and generate use cases
+        function analyzeAnswers() {
+            // Clear previous use cases
+            useCases = [];
+            
+            // Get answers
+            const manual = document.getElementById('manual').value;
+            const bottlenecks = document.getElementById('bottlenecks').value;
+            const content = document.getElementById('content').value;
+            const feedback = document.getElementById('feedback').value;
+            const leads = document.getElementById('leads').value;
+            const recurring = document.getElementById('recurring').value;
+            const helpdesk = document.getElementById('helpdesk').value;
+            const data = document.getElementById('data').value;
+            const reports = document.getElementById('reports').value;
+            const knowledge = document.getElementById('knowledge').value;
+            
+            // Check for content generation potential
+            if (content.toLowerCase().includes('manuell') || content.toLowerCase().includes('zeit')) {
+                useCases.push({
+                    id: 1,
+                    name: 'KI-gestützte Content-Erstellung',
+                    description: 'Automatisierte Erstellung von E-Mails, Angeboten und Newslettern mit KI-Technologie',
+                    potential: 'hoch',
+                    effort: 'niedrig',
+                    priority: 'hoch',
+                    category: 'Marketing & Vertrieb'
+                });
+            }
+            
+            // Check for feedback analysis potential
+            if (feedback.toLowerCase().includes('manuell') || feedback.toLowerCase().includes('nicht systematisch') || feedback.toLowerCase().includes('nicht ausgewertet')) {
+                useCases.push({
+                    id: 2,
+                    name: 'KI-basierte Kundenfeedback-Analyse',
+                    description: 'Automatische Auswertung und Kategorisierung von Kundenfeedback, Erkennung von Mustern und Trends',
+                    potential: 'mittel',
+                    effort: 'mittel',
+                    priority: 'mittel',
+                    category: 'Marketing & Vertrieb'
+                });
+            }
+            
+            // Check for lead management potential
+            if (leads.toLowerCase().includes('ja') || leads.toLowerCase().includes('ungenutzt') || leads.toLowerCase().includes('viele')) {
+                useCases.push({
+                    id: 3,
+                    name: 'Intelligentes Lead Management',
+                    description: 'KI-gestützte Priorisierung und Nachverfolgung von Leads, automatisierte Follow-ups',
+                    potential: 'hoch',
+                    effort: 'mittel',
+                    priority: 'hoch',
+                    category: 'Marketing & Vertrieb'
+                });
+            }
+            
+            // Check for customer support automation potential
+            if (recurring.toLowerCase().includes('manuell') || recurring.toLowerCase().includes('wiederhol') || recurring.toLowerCase().includes('standard')) {
+                useCases.push({
+                    id: 4,
+                    name: 'Automatisierter Kundensupport',
+                    description: 'KI-Chatbot zur Beantwortung wiederkehrender Kundenanfragen, intelligente Routing-Systeme',
+                    potential: 'hoch',
+                    effort: 'mittel',
+                    priority: 'hoch',
+                    category: 'Kundensupport'
+                });
+            }
+            
+            // Check for knowledge management potential
+            if (knowledge.toLowerCase().includes('manuell') || knowledge.toLowerCase().includes('dokument') || knowledge.toLowerCase().includes('nicht zentral')) {
+                useCases.push({
+                    id: 5,
+                    name: 'KI-gestütztes Wissensmanagement',
+                    description: 'Intelligente Wissensbank, automatische Dokumentation und Kategorisierung von Informationen',
+                    potential: 'mittel',
+                    effort: 'hoch',
+                    priority: 'mittel',
+                    category: 'Interne Prozesse'
+                });
+            }
+            
+            // Check for data analysis potential
+            if (data.toLowerCase().includes('regelmäßig') || data.toLowerCase().includes('viel') || data.toLowerCase().includes('zeit')) {
+                useCases.push({
+                    id: 6,
+                    name: 'KI-gestützte Datenanalyse',
+                    description: 'Automatische Analyse und Visualisierung von Daten, Erkennung von Mustern und Trends',
+                    potential: 'hoch',
+                    effort: 'mittel',
+                    priority: 'hoch',
+                    category: 'Interne Prozesse'
+                });
+            }
+            
+            // Check for report automation potential
+            if (reports.toLowerCase().includes('ja') || reports.toLowerCase().includes('manuell') || reports.toLowerCase().includes('viel')) {
+                useCases.push({
+                    id: 7,
+                    name: 'Automatisierte Berichtserstellung',
+                    description: 'KI-gestützte Generierung von standardisierten Berichten, automatische Datenaufbereitung',
+                    potential: 'mittel',
+                    effort: 'niedrig',
+                    priority: 'hoch',
+                    category: 'Interne Prozesse'
+                });
+            }
+            
+            // If no use cases were identified, add a generic one
+            if (useCases.length === 0) {
+                useCases.push({
+                    id: 8,
+                    name: 'Prozessautomatisierung mit KI',
+                    description: 'Identifikation und Automatisierung wiederkehrender Prozesse mit Hilfe von KI',
+                    potential: 'mittel',
+                    effort: 'mittel',
+                    priority: 'mittel',
+                    category: 'Interne Prozesse'
+                });
+            }
+            
+            // Generate results HTML
+            generateResults();
+        }
+        
+        // Generate results HTML
+        function generateResults() {
+            const resultsContainer = document.getElementById('results-content');
+            let html = '';
+            
+            // Group use cases by category
+            const categories = {};
+            useCases.forEach(useCase => {
+                if (!categories[useCase.category]) {
+                    categories[useCase.category] = [];
+                }
+                categories[useCase.category].push(useCase);
+            });
+            
+            // Generate HTML for each category
+            for (const category in categories) {
+                html += `<div class="result-card">
+                            <h3>${category}</h3>`;
+                
+                categories[category].forEach(useCase => {
+                    html += `<div class="use-case">
+                                <h4>${useCase.name}</h4>
+                                <p>${useCase.description}</p>
+                                <div class="rating">
+                                    <span>Potenzial: ${useCase.potential}</span>
+                                    <span>Aufwand: ${useCase.effort}</span>
+                                    <span>Priorität: ${useCase.priority}</span>
+                                </div>
+                            </div>`;
+                });
+                
+                html += `</div>`;
+            }
+            
+            // Add summary table
+            html += `<h3>Übersicht der identifizierten Use Cases</h3>
+                    <table>
+                        <tr>
+                            <th>Use Case</th>
+                            <th>Kategorie</th>
+                            <th>Potenzial</th>
+                            <th>Aufwand</th>
+                            <th>Priorität</th>
+                        </tr>`;
+            
+            useCases.forEach(useCase => {
+                html += `<tr>
+                            <td>${useCase.name}</td>
+                            <td>${useCase.category}</td>
+                            <td>${useCase.potential}</td>
+                            <td>${useCase.effort}</td>
+                            <td>${useCase.priority}</td>
+                        </tr>`;
+            });
+            
+            html += `</table>`;
+            
+            // Add recommendation
+            html += `<div class="result-card">
+                        <h3>Empfehlung</h3>
+                        <p>Basierend auf Ihren Antworten empfehlen wir, mit dem Use Case "${useCases[0].name}" zu beginnen.</p>
+                        <p>Dieser Use Case bietet ein ausgewogenes Verhältnis zwischen Potenzial und Aufwand und kann als Einstieg in Ihre KI-Journey dienen.</p>
+                    </div>`;
+            
+            // Update results container
+            resultsContainer.innerHTML = html;
+        }
+        
+        // Populate use case dropdown
+        function populateUseCaseDropdown() {
+            const dropdown = document.getElementById('promising');
+            
+            // Clear options
+            dropdown.innerHTML = '<option value="" selected disabled>Bitte auswählen...</option>';
+            
+            // Add use cases
+            useCases.forEach(useCase => {
+                const option = document.createElement('option');
+                option.value = useCase.id;
+                option.textContent = useCase.name;
+                dropdown.appendChild(option);
+            });
+        }
+        
+        // Generate final report
+        function generateReport() {
+            // Check if form is valid
+            const form = document.getElementById('planning-form');
+            const inputs = form.querySelectorAll('textarea, select');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value) {
+                    input.style.borderColor = 'red';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Bitte füllen Sie alle Felder aus.');
+                return;
+            }
+            
+            // Get selected use case
+            const useCaseId = parseInt(document.getElementById('promising').value);
+            const selectedUseCase = useCases.find(uc => uc.id === useCaseId);
+            
+            // Get answers
+            const result = document.getElementById('result').value;
+            const support = document.getElementById('support').value;
+            const compatibility = document.getElementById('compatibility').value;
+            const success = document.getElementById('success').value;
+            
+            // Generate report
+            const reportContainer = document.getElementById('report-content');
+            let html = '';
+            
+            // Company info
+            html += `<div class="result-card">
+                        <h3>Unternehmensprofil</h3>
+                        <p><strong>Unternehmen:</strong> ${companyName}</p>
+                    </div>`;
+            
+            // Selected use case
+            html += `<div class="result-card">
+                        <h3>Ausgewählter Use Case</h3>
+                        <h4>${selectedUseCase.name}</h4>
+                        <p>${selectedUseCase.description}</p>
+                        <div class="rating">
+                            <span>Potenzial: ${selectedUseCase.potential}</span>
+                            <span>Aufwand: ${selectedUseCase.effort}</span>
+                            <span>Priorität: ${selectedUseCase.priority}</span>
+                        </div>
+                    </div>`;
+            
+            // Implementation plan
+            html += `<div class="result-card">
+                        <h3>Umsetzungsplan</h3>
+                        <p><strong>30-Tage-Ziel:</strong> ${result}</p>
+                        <p><strong>Interne Unterstützung:</strong> ${support}</p>
+                        <p><strong>Systemkompatibilität:</strong> ${compatibility}</p>
+                        <p><strong>Erfolgskriterien:</strong> ${success}</p>
+                    </div>`;
+            
+            // Next steps
+            html += `<div class="result-card">
+                        <h3>Nächste Schritte</h3>
+                        <ol>
+                            <li>Projekt-Kickoff mit allen Beteiligten</li>
+                            <li>Detaillierte Anforderungsanalyse</li>
+                            <li>Auswahl der passenden KI-Technologie</li>
+                            <li>Entwicklung eines Prototyps</li>
+                            <li>Testphase und Anpassung</li>
+                            <li>Einführung und Training</li>
+                        </ol>
+                    </div>`;
+            
+            // Timeline
+            html += `<div class="result-card">
+                        <h3>Zeitplan</h3>
+                        <table>
+                            <tr>
+                                <th>Woche</th>
+                                <th>Aktivität</th>
+                            </tr>
+                            <tr>
+                                <td>Woche 1</td>
+                                <td>Kickoff und Anforderungsanalyse</td>
+                            </tr>
+                            <tr>
+                                <td>Woche 2</td>
+                                <td>Technologie-Auswahl und Konzeption</td>
+                            </tr>
+                            <tr>
+                                <td>Woche 3</td>
+                                <td>Prototyp-Entwicklung</td>
+                            </tr>
+                            <tr>
+                                <td>Woche 4</td>
+                                <td>Test und Anpassung</td>
+                            </tr>
+                            <tr>
+                                <td>Tag 30</td>
+                                <td>Präsentation des Ergebnisses</td>
+                            </tr>
+                        </table>
+                    </div>`;
+            
+            // Update report container
+            reportContainer.innerHTML = html;
+            
+            // Show report
+            showPhase('final-report');
+        }
+        
+        // Download PDF function
+        function downloadPDF() {
+            // Simulate PDF download
+            const reportContent = document.getElementById('report-content').innerHTML;
+            const blob = new Blob([
+                `<!DOCTYPE html>
+                <html>
+                <head>
+                    <title>KI Starter KIT - Bericht</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                        h1, h2, h3, h4 {
+                            color: #20B2AA;
+                        }
+                        .result-card {
+                            margin: 20px 0;
+                            padding: 15px;
+                            border-left: 5px solid #20B2AA;
+                            background: #f9f9f9;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 15px 0;
+                        }
+                        th, td {
+                            padding: 8px;
+                            text-align: left;
+                            border-bottom: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        .rating span {
+                            display: inline-block;
+                            background: #4DD0E1;
+                            color: white;
+                            padding: 3px 8px;
+                            border-radius: 12px;
+                            font-size: 14px;
+                            margin-right: 10px;
+                            margin-top: 5px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>KI Starter KIT - Analysebericht</h1>
+                    ${reportContent}
+                    <div style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px;">
+                        <p>Erstellt am ${new Date().toLocaleDateString('de-DE')}</p>
+                    </div>
+                </body>
+                </html>`
+            ], {type: 'text/html'});
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `KI_Starter_KIT_Bericht_${new Date().toISOString().slice(0,10)}.html`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('Der Bericht wurde erfolgreich heruntergeladen! Sie können ihn in Ihrem Browser öffnen und als PDF speichern (Drucken > Als PDF speichern).');
+        }
+    </script>
+</body>
+</html>
