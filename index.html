@@ -5,29 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TYQUA KI Starter KIT - Analysetool</title>
     <style>
-        :root {
-            --primary: #20B2AA;
-            --primary-light: #4DD0E1;
-            --primary-dark: #0A8C86;
-            --secondary: #FFFFFF;
-            --background: #F5F8FA;
-            --text: #333333;
-            --text-light: #777777;
-            --border: #E0E0E0;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --radius: 10px;
-        }
-        
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
         }
         
         body {
-            background-color: var(--background);
-            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
             line-height: 1.6;
         }
         
@@ -37,814 +24,885 @@
             padding: 20px;
         }
         
-        header {
+        /* Header mit TYQUA Logo */
+        .header {
+            background: #000;
+            color: #00FFFF;
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
-            background-color: #000000;
-            color: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
-        header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: var(--primary-light);
-        }
-        
-        header p {
-            font-size: 18px;
-            opacity: 0.9;
-            color: var(--primary-light);
-        }
-        
-        .logo {
-            width: 200px;
-            height: auto;
+        .tyqua-logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #00FFFF;
+            text-shadow: 0 0 20px rgba(0,255,255,0.5);
             margin-bottom: 15px;
+            letter-spacing: 3px;
         }
         
+        .header h1 {
+            color: #00FFFF;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #00BFBF;
+            font-size: 16px;
+        }
+        
+        /* Phase Navigation */
+        .phase-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .phase-btn {
+            background: linear-gradient(45deg, #00FFFF, #00BFBF);
+            color: #000;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,255,255,0.3);
+        }
+        
+        .phase-btn.disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .phase-btn.active {
+            background: linear-gradient(45deg, #00BFBF, #008B8B);
+            color: white;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #00FFFF, #00BFBF);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, .2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, .2) 50%,
+                rgba(255, 255, 255, .2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        
+        /* Cards */
         .card {
             background: white;
-            border-radius: var(--radius);
+            border-radius: 15px;
             padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .card.active {
+            border-color: #00FFFF;
+            box-shadow: 0 0 30px rgba(0,255,255,0.3);
         }
         
         .card h2 {
-            color: var(--primary);
+            color: #00BFBF;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-light);
+            font-size: 24px;
+            text-align: center;
         }
         
         .card h3 {
-            margin: 25px 0 15px;
-            color: var(--primary-dark);
+            color: #008B8B;
+            margin: 20px 0 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #00FFFF;
+            padding-bottom: 5px;
         }
         
-        .phases {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .phase {
-            flex: 1;
-            min-width: 300px;
-            padding: 20px;
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            position: relative;
-            border-top: 4px solid var(--primary);
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .phase:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-        }
-        
-        .phase-number {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: var(--primary);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .question-group {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: rgba(255,255,255,0.5);
-        }
-        
+        /* Form Elements */
         .question {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .question:last-child {
-            border-bottom: none;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #00FFFF;
         }
         
         .question label {
             display: block;
             font-weight: 600;
+            color: #333;
             margin-bottom: 8px;
         }
         
-        .question input[type="text"],
         .question textarea,
         .question select {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 16px;
-        }
-        
-        .question textarea {
-            min-height: 100px;
+            transition: all 0.3s ease;
             resize: vertical;
+            min-height: 80px;
         }
         
-        button {
-            background: var(--primary);
-            color: white;
+        .question textarea:focus,
+        .question select:focus {
+            outline: none;
+            border-color: #00FFFF;
+            box-shadow: 0 0 10px rgba(0,255,255,0.2);
+        }
+        
+        .question.error textarea,
+        .question.error select {
+            border-color: #ff4757;
+            background-color: #fff5f5;
+        }
+        
+        .error-msg {
+            color: #ff4757;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .question.error .error-msg {
+            display: block;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: linear-gradient(45deg, #00FFFF, #00BFBF);
+            color: #000;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 5px;
+            padding: 12px 30px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px;
         }
         
-        button:hover {
-            background: var(--primary-dark);
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,255,255,0.3);
         }
         
-        button.secondary {
-            background: white;
-            color: var(--primary);
-            border: 1px solid var(--primary);
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
         }
         
-        button.secondary:hover {
-            background: #f0f0f0;
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 5px 15px rgba(108,117,125,0.3);
         }
         
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 15px;
+        .btn-group {
+            text-align: center;
+            margin: 30px 0;
         }
         
-        .hidden {
-            display: none !important;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .result-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--primary);
-        }
-        
-        .result-card h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
+        /* Results */
         .use-case {
-            background: rgba(77, 208, 225, 0.1);
-            border: 1px solid var(--primary-light);
-            padding: 15px;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #e3f8ff 0%, #b3ecff 100%);
+            border: 2px solid #00BFBF;
+            border-radius: 10px;
+            padding: 20px;
             margin: 15px 0;
         }
         
         .use-case h4 {
-            color: var(--primary-dark);
-            margin-bottom: 8px;
+            color: #006666;
+            margin-bottom: 10px;
+        }
+        
+        .use-case p {
+            color: #333;
+            margin-bottom: 10px;
         }
         
         .rating {
             display: flex;
+            gap: 10px;
             flex-wrap: wrap;
-            margin: 10px 0;
-            gap: 8px;
         }
         
-        .rating span {
-            background: var(--primary-light);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 14px;
+        .rating-badge {
+            background: #00FFFF;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
         }
         
+        .rating-badge.high { background: #00ff00; }
+        .rating-badge.medium { background: #ffff00; color: #000; }
+        .rating-badge.low { background: #ff6b6b; color: white; }
+        
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        table th, table td {
+        th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #e0e0e0;
         }
         
-        table th {
-            background: rgba(77, 208, 225, 0.1);
-            color: var(--primary-dark);
+        th {
+            background: linear-gradient(45deg, #00FFFF, #00BFBF);
+            color: #000;
+            font-weight: bold;
         }
         
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-light);
-            font-size: 14px;
-            margin-top: 40px;
+        /* Phase Content */
+        .phase-content {
+            display: none;
         }
         
-        .error {
-            border-color: #ff6b6b !important;
+        .phase-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
         }
         
-        .error-message {
-            color: #ff6b6b;
-            font-size: 14px;
-            margin-top: 5px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
             
-            .phase {
-                min-width: 100%;
+            .tyqua-logo {
+                font-size: 36px;
             }
             
-            .buttons {
+            .phase-nav {
                 flex-direction: column;
+                align-items: center;
             }
             
-            button {
-                width: 100%;
+            .phase-btn {
+                min-width: 250px;
+            }
+            
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                margin: 5px 0;
             }
             
             .rating {
                 flex-direction: column;
             }
         }
+        
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #00FFFF;
+            stroke-miterlimit: 10;
+            margin: 10px auto;
+            box-shadow: inset 0px 0px 0px #00FFFF;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #00FFFF;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+        
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #00FFFF;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <!-- TYQUA Logo -->
-            <svg width="200" height="50" viewBox="0 0 200 50">
-                <text x="10" y="35" font-family="Arial" font-size="40" font-weight="bold" fill="#4DD0E1">TYQUA</text>
-            </svg>
+        <!-- Header -->
+        <div class="header">
+            <div class="tyqua-logo">TYQUA</div>
             <h1>KI Starter KIT - Analysetool</h1>
             <p>Systematische Identifikation und Planung von KI-Use-Cases für Ihr Unternehmen</p>
-        </header>
-        
-        <div id="phase-selector">
-            <div class="progress-bar">
-                <div class="progress" id="progress-bar"></div>
-            </div>
-            
-            <div class="phases">
-                <div class="phase" onclick="showPhase('interview')" id="phase-interview-btn">
-                    <div class="phase-number">1</div>
-                    <h3>Interview-Phase</h3>
-                    <p>Kontext verstehen & KI-Potenziale identifizieren</p>
-                </div>
-                <div class="phase" onclick="showPhase('results')" id="phase-results-btn">
-                    <div class="phase-number">2</div>
-                    <h3>Zwischenergebnisse</h3>
-                    <p>Identifizierte Use Cases und Potenziale</p>
-                </div>
-                <div class="phase" onclick="showPhase('planning')" id="phase-planning-btn">
-                    <div class="phase-number">3</div>
-                    <h3>Planungsphase</h3>
-                    <p>Use Case auswählen & Umsetzung planen</p>
-                </div>
-            </div>
         </div>
         
-        <div id="phase-interview" class="phase-content">
-            <div class="card">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- Phase Navigation -->
+        <div class="phase-nav">
+            <button class="phase-btn active" id="btnPhase1" onclick="showPhase(1)">
+                📋 Phase 1+2: Interview
+            </button>
+            <button class="phase-btn disabled" id="btnPhase2" onclick="showPhase(2)">
+                📊 Zwischenergebnisse
+            </button>
+            <button class="phase-btn disabled" id="btnPhase3" onclick="showPhase(3)">
+                🎯 Phase 3: Planung
+            </button>
+            <button class="phase-btn disabled" id="btnPhase4" onclick="showPhase(4)">
+                📄 Abschlussbericht
+            </button>
+        </div>
+        
+        <!-- Phase 1: Interview -->
+        <div id="phase1" class="phase-content active">
+            <div class="card active">
                 <h2>Phase 1 + 2: Interview & KI-Potenziale</h2>
-                <p>Beantworten Sie die folgenden Fragen, um Ihr Unternehmen und potenzielle KI-Anwendungsfälle zu identifizieren.</p>
+                <p style="text-align: center; margin-bottom: 30px;">Beantworten Sie die folgenden Fragen, um Ihr Unternehmen und potenzielle KI-Anwendungsfälle zu identifizieren.</p>
                 
-                <form id="interview-form">
-                    <div class="question-group">
-                        <h3>Kontext & Verständnis</h3>
-                        
-                        <div class="question">
-                            <label for="business">1. Was genau bietet Ihr Unternehmen an – in einem Satz?</label>
-                            <textarea id="business" required></textarea>
-                            <div class="error-message" id="business-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="customers">2. Wer sind Ihre typischen Kunden?</label>
-                            <textarea id="customers" required></textarea>
-                            <div class="error-message" id="customers-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="acquisition">3. Wie gewinnen Sie aktuell neue Kunden?</label>
-                            <textarea id="acquisition" required></textarea>
-                            <div class="error-message" id="acquisition-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="bottlenecks">4. Was sind aktuell Ihre größten operativen Engpässe?</label>
-                            <textarea id="bottlenecks" required></textarea>
-                            <div class="error-message" id="bottlenecks-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="manual">5. Welche Prozesse laufen noch manuell oder sind besonders zeitintensiv?</label>
-                            <textarea id="manual" required></textarea>
-                            <div class="error-message" id="manual-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="experience">6. Haben Sie schon mit Automatisierung, KI oder Tools experimentiert?</label>
-                            <textarea id="experience" required></textarea>
-                            <div class="error-message" id="experience-error"></div>
-                        </div>
+                <form id="interviewForm">
+                    <h3>📈 Kontext & Verständnis</h3>
+                    
+                    <div class="question" id="q1">
+                        <label for="business">1. Was genau bietet Ihr Unternehmen an – in einem Satz?</label>
+                        <textarea id="business" name="business" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihr Unternehmen.</div>
                     </div>
                     
-                    <div class="question-group">
-                        <h3>Marketing & Vertrieb</h3>
-                        
-                        <div class="question">
-                            <label for="sales">7. Wie wird bei Ihnen aktuell verkauft? Persönlich, digital, hybrid?</label>
-                            <textarea id="sales" required></textarea>
-                            <div class="error-message" id="sales-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="content">8. Wie schreiben Sie aktuell E-Mails, Angebote, Newsletter?</label>
-                            <textarea id="content" required></textarea>
-                            <div class="error-message" id="content-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="feedback">9. Wie wird Kundenfeedback gesammelt und ausgewertet?</label>
-                            <textarea id="feedback" required></textarea>
-                            <div class="error-message" id="feedback-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="leads">10. Haben Sie ungenutzte Leads oder viele Nachfassaktionen?</label>
-                            <textarea id="leads" required></textarea>
-                            <div class="error-message" id="leads-error"></div>
-                        </div>
+                    <div class="question" id="q2">
+                        <label for="customers">2. Wer sind Ihre typischen Kunden?</label>
+                        <textarea id="customers" name="customers" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Zielgruppe.</div>
                     </div>
                     
-                    <div class="question-group">
-                        <h3>Kundensupport / Kommunikation</h3>
-                        
-                        <div class="question">
-                            <label for="recurring">11. Wie gehen Sie mit wiederkehrenden Kundenfragen um?</label>
-                            <textarea id="recurring" required></textarea>
-                            <div class="error-message" id="recurring-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="helpdesk">12. Gibt es einen Helpdesk / FAQ / Support-System?</label>
-                            <textarea id="helpdesk" required></textarea>
-                            <div class="error-message" id="helpdesk-error"></div>
-                        </div>
+                    <div class="question" id="q3">
+                        <label for="acquisition">3. Wie gewinnen Sie aktuell neue Kunden?</label>
+                        <textarea id="acquisition" name="acquisition" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Kundenakquise.</div>
                     </div>
                     
-                    <div class="question-group">
-                        <h3>Interne Prozesse</h3>
-                        
-                        <div class="question">
-                            <label for="data">13. Welche Daten müssen regelmäßig ausgewertet werden?</label>
-                            <textarea id="data" required></textarea>
-                            <div class="error-message" id="data-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="reports">14. Gibt es standardisierte Berichte, die manuell erstellt werden?</label>
-                            <textarea id="reports" required></textarea>
-                            <div class="error-message" id="reports-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="knowledge">15. Wie wird Wissen im Unternehmen dokumentiert und genutzt?</label>
-                            <textarea id="knowledge" required></textarea>
-                            <div class="error-message" id="knowledge-error"></div>
-                        </div>
+                    <div class="question" id="q4">
+                        <label for="bottlenecks">4. Was sind aktuell Ihre größten operativen Engpässe?</label>
+                        <textarea id="bottlenecks" name="bottlenecks" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Herausforderungen.</div>
                     </div>
                     
-                    <div class="buttons">
-                        <button type="button" onclick="resetForm('interview-form')">Zurücksetzen</button>
-                        <button type="button" onclick="submitInterview()">Interview abschließen</button>
+                    <div class="question" id="q5">
+                        <label for="manual">5. Welche Prozesse laufen noch manuell oder sind besonders zeitintensiv?</label>
+                        <textarea id="manual" name="manual" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie manuelle Prozesse.</div>
+                    </div>
+                    
+                    <div class="question" id="q6">
+                        <label for="experience">6. Haben Sie schon mit Automatisierung, KI oder Tools experimentiert?</label>
+                        <textarea id="experience" name="experience" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Erfahrungen.</div>
+                    </div>
+                    
+                    <h3>🎯 Marketing & Vertrieb</h3>
+                    
+                    <div class="question" id="q7">
+                        <label for="sales">7. Wie wird bei Ihnen aktuell verkauft? Persönlich, digital, hybrid?</label>
+                        <textarea id="sales" name="sales" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihren Verkaufsprozess.</div>
+                    </div>
+                    
+                    <div class="question" id="q8">
+                        <label for="content">8. Wie schreiben Sie aktuell E-Mails, Angebote, Newsletter?</label>
+                        <textarea id="content" name="content" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Content-Erstellung.</div>
+                    </div>
+                    
+                    <div class="question" id="q9">
+                        <label for="feedback">9. Wie wird Kundenfeedback gesammelt und ausgewertet?</label>
+                        <textarea id="feedback" name="feedback" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihr Feedback-Management.</div>
+                    </div>
+                    
+                    <div class="question" id="q10">
+                        <label for="leads">10. Haben Sie ungenutzte Leads oder viele Nachfassaktionen?</label>
+                        <textarea id="leads" name="leads" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihr Lead-Management.</div>
+                    </div>
+                    
+                    <h3>🎧 Kundensupport / Kommunikation</h3>
+                    
+                    <div class="question" id="q11">
+                        <label for="recurring">11. Wie gehen Sie mit wiederkehrenden Kundenfragen um?</label>
+                        <textarea id="recurring" name="recurring" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihren Support-Prozess.</div>
+                    </div>
+                    
+                    <div class="question" id="q12">
+                        <label for="helpdesk">12. Gibt es einen Helpdesk / FAQ / Support-System?</label>
+                        <textarea id="helpdesk" name="helpdesk" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Support-Systeme.</div>
+                    </div>
+                    
+                    <h3>⚙️ Interne Prozesse</h3>
+                    
+                    <div class="question" id="q13">
+                        <label for="data">13. Welche Daten müssen regelmäßig ausgewertet werden?</label>
+                        <textarea id="data" name="data" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Datenanalyse.</div>
+                    </div>
+                    
+                    <div class="question" id="q14">
+                        <label for="reports">14. Gibt es standardisierte Berichte, die manuell erstellt werden?</label>
+                        <textarea id="reports" name="reports" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihre Berichterstattung.</div>
+                    </div>
+                    
+                    <div class="question" id="q15">
+                        <label for="knowledge">15. Wie wird Wissen im Unternehmen dokumentiert und genutzt?</label>
+                        <textarea id="knowledge" name="knowledge" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihr Wissensmanagement.</div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="resetInterview()">🔄 Zurücksetzen</button>
+                        <button type="button" class="btn" onclick="submitInterview()">✅ Interview abschließen</button>
                     </div>
                 </form>
             </div>
         </div>
         
-        <div id="phase-results" class="phase-content hidden">
-            <div class="card">
-                <h2>Identifizierte KI-Potenziale</h2>
-                <p>Basierend auf Ihren Antworten wurden folgende KI-Potenziale und Use Cases identifiziert:</p>
-                
-                <div id="results-content">
+        <!-- Phase 2: Results -->
+        <div id="phase2" class="phase-content">
+            <div class="card active">
+                <h2>📊 Identifizierte KI-Potenziale</h2>
+                <div id="resultsContent">
                     <!-- Results will be inserted here -->
                 </div>
-                
-                <div class="buttons">
-                    <button type="button" onclick="showPhase('interview')">Zurück zum Interview</button>
-                    <button type="button" onclick="proceedToPlanning()">Zur Planungsphase</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="showPhase(1)">← Zurück zum Interview</button>
+                    <button type="button" class="btn" onclick="showPhase(3)">Zur Planungsphase →</button>
                 </div>
             </div>
         </div>
         
-        <div id="phase-planning" class="phase-content hidden">
-            <div class="card">
-                <h2>Phase 3: Auswahl & Planung</h2>
-                <p>Basierend auf den identifizierten Use Cases, planen Sie nun die konkrete Umsetzung.</p>
+        <!-- Phase 3: Planning -->
+        <div id="phase3" class="phase-content">
+            <div class="card active">
+                <h2>🎯 Phase 3: Auswahl & Planung</h2>
+                <p style="text-align: center; margin-bottom: 30px;">Basierend auf den identifizierten Use Cases, planen Sie nun die konkrete Umsetzung.</p>
                 
-                <form id="planning-form">
-                    <div class="question-group">
-                        <div class="question">
-                            <label for="promising">16. Welche dieser Ideen erscheint Ihnen am vielversprechendsten?</label>
-                            <select id="promising" required>
-                                <option value="" selected disabled>Bitte auswählen...</option>
-                                <!-- Options will be filled dynamically -->
-                            </select>
-                            <div class="error-message" id="promising-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="result">17. Was wäre ein „sichtbares Ergebnis", das Sie in 30 Tagen erreichen wollen?</label>
-                            <textarea id="result" required></textarea>
-                            <div class="error-message" id="result-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="support">18. Wer könnte intern bei der Umsetzung unterstützen?</label>
-                            <textarea id="support" required></textarea>
-                            <div class="error-message" id="support-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="compatibility">19. Gibt es Tools oder Systeme, mit denen die Lösung kompatibel sein muss?</label>
-                            <textarea id="compatibility" required></textarea>
-                            <div class="error-message" id="compatibility-error"></div>
-                        </div>
-                        
-                        <div class="question">
-                            <label for="success">20. Was wäre für Sie ein erfolgreicher Abschluss des Starter-Kits?</label>
-                            <textarea id="success" required></textarea>
-                            <div class="error-message" id="success-error"></div>
-                        </div>
+                <form id="planningForm">
+                    <div class="question" id="q16">
+                        <label for="promising">16. Welche dieser Ideen erscheint Ihnen am vielversprechendsten?</label>
+                        <select id="promising" name="promising" required>
+                            <option value="">Bitte auswählen...</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                        <div class="error-msg">Bitte wählen Sie einen Use Case aus.</div>
                     </div>
                     
-                    <div class="buttons">
-                        <button type="button" onclick="showPhase('results')">Zurück zu den Ergebnissen</button>
-                        <button type="button" onclick="generateReport()">Bericht erstellen</button>
+                    <div class="question" id="q17">
+                        <label for="result">17. Was wäre ein „sichtbares Ergebnis", das Sie in 30 Tagen erreichen wollen?</label>
+                        <textarea id="result" name="result" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie Ihr 30-Tage-Ziel.</div>
+                    </div>
+                    
+                    <div class="question" id="q18">
+                        <label for="support">18. Wer könnte intern bei der Umsetzung unterstützen?</label>
+                        <textarea id="support" name="support" required></textarea>
+                        <div class="error-msg">Bitte nennen Sie interne Unterstützer.</div>
+                    </div>
+                    
+                    <div class="question" id="q19">
+                        <label for="compatibility">19. Gibt es Tools oder Systeme, mit denen die Lösung kompatibel sein muss?</label>
+                        <textarea id="compatibility" name="compatibility" required></textarea>
+                        <div class="error-msg">Bitte beschreiben Sie System-Anforderungen.</div>
+                    </div>
+                    
+                    <div class="question" id="q20">
+                        <label for="success">20. Was wäre für Sie ein erfolgreicher Abschluss des Starter-Kits?</label>
+                        <textarea id="success" name="success" required></textarea>
+                        <div class="error-msg">Bitte definieren Sie Erfolgskriterien.</div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="showPhase(2)">← Zurück zu den Ergebnissen</button>
+                        <button type="button" class="btn" onclick="generateFinalReport()">📄 Abschlussbericht erstellen</button>
                     </div>
                 </form>
             </div>
         </div>
         
-        <div id="final-report" class="phase-content hidden">
-            <div class="card">
-                <h2>KI Starter KIT - Abschlussbericht</h2>
-                
-                <div id="report-content">
-                    <!-- Report will be inserted here -->
+        <!-- Phase 4: Final Report -->
+        <div id="phase4" class="phase-content">
+            <div class="card active">
+                <h2>📄 KI Starter KIT - Abschlussbericht</h2>
+                <div id="finalReportContent">
+                    <!-- Final report will be inserted here -->
                 </div>
-                
-                <div class="buttons">
-                    <button type="button" onclick="showPhase('planning')">Zurück zur Planung</button>
-                    <button type="button" onclick="downloadPDF()">Als PDF herunterladen</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="showPhase(3)">← Zurück zur Planung</button>
+                    <button type="button" class="btn" onclick="downloadReport()">💾 Bericht herunterladen</button>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>© 2025 TYQUA - KI Starter KIT Analysetool</p>
-        </footer>
     </div>
-    
+
     <script>
-        // Globals
-        let currentPhase = 'interview';
+        // Global variables
+        let currentPhase = 1;
+        let interviewData = {};
         let useCases = [];
-        let companyName = "";
+        let selectedUseCase = null;
+        let planningData = {};
         
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("Tool initializing...");
-            
-            // Disable phases that shouldn't be accessible yet
-            document.getElementById('phase-results-btn').style.opacity = '0.5';
-            document.getElementById('phase-planning-btn').style.opacity = '0.5';
-            
-            // Show first phase
-            showPhase('interview');
-            
-            // Set progress
-            updateProgress(33);
-            
-            console.log("Tool initialized");
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TYQUA KI Analysetool started');
+            updateProgress(25);
         });
         
-        // Show selected phase
+        // Show specific phase
         function showPhase(phase) {
-            console.log("Attempting to show phase:", phase);
-            
-            // Check if phase is accessible
-            if ((phase === 'results' || phase === 'planning') && useCases.length === 0) {
-                alert('Bitte schließen Sie zuerst das Interview ab.');
+            // Validate phase access
+            if (phase > currentPhase + 1) {
+                alert('Bitte schließen Sie die vorherigen Phasen ab.');
                 return;
             }
             
             // Hide all phases
-            document.querySelectorAll('.phase-content').forEach(el => {
-                el.classList.add('hidden');
+            document.querySelectorAll('.phase-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
             // Show selected phase
-            document.getElementById('phase-' + phase).classList.remove('hidden');
-            
-            // Update current phase
-            currentPhase = phase;
+            document.getElementById('phase' + phase).classList.add('active');
+            document.getElementById('btnPhase' + phase).classList.add('active');
             
             // Update progress
-            if (phase === 'interview') updateProgress(33);
-            if (phase === 'results') updateProgress(66);
-            if (phase === 'planning') updateProgress(85);
-            if (phase === 'final-report') updateProgress(100);
+            const progressValues = [0, 25, 50, 75, 100];
+            updateProgress(progressValues[phase] || 0);
             
-            console.log("Now showing phase:", phase);
+            console.log('Showing phase:', phase);
         }
         
         // Update progress bar
-        function updateProgress(percent) {
-            document.getElementById('progress-bar').style.width = percent + '%';
+        function updateProgress(percentage) {
+            document.getElementById('progressBar').style.width = percentage + '%';
         }
         
-        // Reset form
-        function resetForm(formId) {
-            if (confirm('Möchten Sie wirklich alle eingegebenen Daten zurücksetzen?')) {
-                document.getElementById(formId).reset();
-                
-                // Clear error messages
-                document.querySelectorAll('.error-message').forEach(el => {
-                    el.textContent = '';
-                });
-                
-                // Reset error styling
-                document.querySelectorAll('textarea, select').forEach(el => {
-                    el.classList.remove('error');
-                });
+        // Reset interview form
+        function resetInterview() {
+            if (confirm('Möchten Sie wirklich alle Eingaben zurücksetzen?')) {
+                document.getElementById('interviewForm').reset();
+                document.querySelectorAll('.question').forEach(q => q.classList.remove('error'));
+                interviewData = {};
+                console.log('Interview form reset');
             }
         }
         
-        // Validate a single field
-        function validateField(id) {
-            const field = document.getElementById(id);
-            const errorElement = document.getElementById(id + '-error');
+        // Validate form fields
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
             
-            if (!field.value.trim()) {
-                field.classList.add('error');
-                errorElement.textContent = 'Dieses Feld ist erforderlich.';
-                return false;
-            } else {
-                field.classList.remove('error');
-                errorElement.textContent = '';
-                return true;
-            }
+            requiredFields.forEach(field => {
+                const question = field.closest('.question');
+                if (!field.value.trim()) {
+                    question.classList.add('error');
+                    isValid = false;
+                } else {
+                    question.classList.remove('error');
+                }
+            });
+            
+            return isValid;
         }
         
         // Submit interview
         function submitInterview() {
-            console.log("Submitting interview...");
+            console.log('Submitting interview...');
             
-            // Check if form is valid
-            const fieldIds = [
-                'business', 'customers', 'acquisition', 'bottlenecks', 'manual', 'experience',
-                'sales', 'content', 'feedback', 'leads', 'recurring', 'helpdesk',
-                'data', 'reports', 'knowledge'
-            ];
-            
-            let isValid = true;
-            
-            fieldIds.forEach(id => {
-                if (!validateField(id)) {
-                    isValid = false;
-                }
-            });
-            
-            if (!isValid) {
+            if (!validateForm('interviewForm')) {
                 alert('Bitte füllen Sie alle erforderlichen Felder aus.');
                 return;
             }
             
-            // Get company name
-            companyName = document.getElementById('business').value.trim();
+            // Collect form data
+            const form = document.getElementById('interviewForm');
+            const formData = new FormData(form);
+            
+            interviewData = {};
+            for (let [key, value] of formData.entries()) {
+                interviewData[key] = value.trim();
+            }
+            
+            console.log('Interview data collected:', interviewData);
             
             // Analyze answers and generate use cases
-            analyzeAnswers();
+            generateUseCases();
             
-            // Enable results and planning phases
-            document.getElementById('phase-results-btn').style.opacity = '1';
-            document.getElementById('phase-planning-btn').style.opacity = '1';
+            // Enable next phases
+            currentPhase = Math.max(currentPhase, 2);
+            document.getElementById('btnPhase2').classList.remove('disabled');
+            document.getElementById('btnPhase3').classList.remove('disabled');
             
-            // Show results phase
-            showPhase('results');
+            // Show results
+            showPhase(2);
             
-            console.log("Interview submitted successfully. Use cases generated:", useCases.length);
+            console.log('Interview submitted successfully');
         }
         
-        // Analyze answers and generate use cases
-        function analyzeAnswers() {
-            // Clear previous use cases
+        // Generate use cases based on interview answers
+        function generateUseCases() {
             useCases = [];
             
-            // Get answers
-            const manual = document.getElementById('manual').value.toLowerCase();
-            const bottlenecks = document.getElementById('bottlenecks').value.toLowerCase();
-            const content = document.getElementById('content').value.toLowerCase();
-            const feedback = document.getElementById('feedback').value.toLowerCase();
-            const leads = document.getElementById('leads').value.toLowerCase();
-            const recurring = document.getElementById('recurring').value.toLowerCase();
-            const helpdesk = document.getElementById('helpdesk').value.toLowerCase();
-            const data = document.getElementById('data').value.toLowerCase();
-            const reports = document.getElementById('reports').value.toLowerCase();
-            const knowledge = document.getElementById('knowledge').value.toLowerCase();
+            const answers = interviewData;
             
-            console.log("Analyzing answers to generate use cases...");
-            
-            // Check for content generation potential
-            if (content.includes('manuell') || content.includes('zeit') || content.includes('aufwändig')) {
+            // Content Creation Use Case
+            if (answers.content && (answers.content.includes('manuell') || answers.content.includes('zeit') || answers.content.includes('aufwändig'))) {
                 useCases.push({
-                    id: 1,
-                    name: 'KI-gestützte Content-Erstellung',
-                    description: 'Automatisierte Erstellung von E-Mails, Angeboten und Newslettern mit KI-Technologie',
+                    id: 'content-ai',
+                    name: '🤖 KI-gestützte Content-Erstellung',
+                    description: 'Automatisierte Erstellung von E-Mails, Angeboten und Newslettern mit KI-Technologie.',
+                    category: 'Marketing & Vertrieb',
                     potential: 'hoch',
                     effort: 'niedrig',
                     priority: 'hoch',
-                    category: 'Marketing & Vertrieb'
+                    benefits: ['Zeitersparnis bis zu 70%', 'Konsistente Qualität', 'Schnellere Marktreaktion'],
+                    implementation: '2-4 Wochen'
                 });
             }
             
-            // Check for feedback analysis potential
-            if (feedback.includes('manuell') || feedback.includes('nicht systematisch') || feedback.includes('nicht ausgewertet')) {
+            // Lead Management Use Case
+            if (answers.leads && (answers.leads.includes('ja') || answers.leads.includes('ungenutzt') || answers.leads.includes('viele'))) {
                 useCases.push({
-                    id: 2,
-                    name: 'KI-basierte Kundenfeedback-Analyse',
-                    description: 'Automatische Auswertung und Kategorisierung von Kundenfeedback, Erkennung von Mustern und Trends',
-                    potential: 'mittel',
+                    id: 'lead-ai',
+                    name: '🎯 Intelligentes Lead Management',
+                    description: 'KI-gestützte Priorisierung und Nachverfolgung von Leads mit automatisierten Follow-ups.',
+                    category: 'Marketing & Vertrieb',
+                    potential: 'hoch',
+                    effort: 'mittel',
+                    priority: 'hoch',
+                    benefits: ['Erhöhte Conversion-Rate', 'Automatisierte Nachverfolgung', 'Bessere Lead-Qualifizierung'],
+                    implementation: '3-6 Wochen'
+                });
+            }
+            
+            // Customer Support Use Case
+            if (answers.recurring && (answers.recurring.includes('manuell') || answers.recurring.includes('wiederhol') || answers.recurring.includes('häufig'))) {
+                useCases.push({
+                    id: 'support-ai',
+                    name: '🎧 Automatisierter Kundensupport',
+                    description: 'KI-Chatbot zur Beantwortung wiederkehrender Kundenanfragen und intelligentes Ticket-Routing.',
+                    category: 'Kundensupport',
+                    potential: 'hoch',
+                    effort: 'mittel',
+                    priority: 'hoch',
+                    benefits: ['24/7 Verfügbarkeit', 'Sofortige Antworten', 'Entlastung des Support-Teams'],
+                    implementation: '4-8 Wochen'
+                });
+            }
+            
+            // Data Analysis Use Case
+            if (answers.data && (answers.data.includes('regelmäßig') || answers.data.includes('viel') || answers.data.includes('komplex'))) {
+                useCases.push({
+                    id: 'data-ai',
+                    name: '📊 KI-gestützte Datenanalyse',
+                    description: 'Automatische Analyse und Visualisierung von Daten mit Erkennung von Mustern und Trends.',
+                    category: 'Interne Prozesse',
+                    potential: 'hoch',
                     effort: 'mittel',
                     priority: 'mittel',
-                    category: 'Marketing & Vertrieb'
+                    benefits: ['Datenbasierte Entscheidungen', 'Automatische Insights', 'Predictive Analytics'],
+                    implementation: '6-12 Wochen'
                 });
             }
             
-            // Check for lead management potential
-            if (leads.includes('ja') || leads.includes('ungenutzt') || leads.includes('viele')) {
+            // Report Automation Use Case
+            if (answers.reports && (answers.reports.includes('ja') || answers.reports.includes('manuell') || answers.reports.includes('zeit'))) {
                 useCases.push({
-                    id: 3,
-                    name: 'Intelligentes Lead Management',
-                    description: 'KI-gestützte Priorisierung und Nachverfolgung von Leads, automatisierte Follow-ups',
-                    potential: 'hoch',
-                    effort: 'mittel',
-                    priority: 'hoch',
-                    category: 'Marketing & Vertrieb'
-                });
-            }
-            
-            // Check for customer support automation potential
-            if (recurring.includes('manuell') || recurring.includes('wiederhol') || recurring.includes('standard')) {
-                useCases.push({
-                    id: 4,
-                    name: 'Automatisierter Kundensupport',
-                    description: 'KI-Chatbot zur Beantwortung wiederkehrender Kundenanfragen, intelligente Routing-Systeme',
-                    potential: 'hoch',
-                    effort: 'mittel',
-                    priority: 'hoch',
-                    category: 'Kundensupport'
-                });
-            }
-            
-            // Check for knowledge management potential
-            if (knowledge.includes('manuell') || knowledge.includes('dokument') || knowledge.includes('nicht zentral')) {
-                useCases.push({
-                    id: 5,
-                    name: 'KI-gestütztes Wissensmanagement',
-                    description: 'Intelligente Wissensbank, automatische Dokumentation und Kategorisierung von Informationen',
+                    id: 'report-ai',
+                    name: '📈 Automatisierte Berichtserstellung',
+                    description: 'KI-gestützte Generierung von Berichten mit automatischer Datenaufbereitung und -interpretation.',
+                    category: 'Interne Prozesse',
                     potential: 'mittel',
+                    effort: 'niedrig',
+                    priority: 'hoch',
+                    benefits: ['Zeitersparnis bei Berichten', 'Konsistente Formatierung', 'Automatische Updates'],
+                    implementation: '2-4 Wochen'
+                });
+            }
+            
+            // Process Automation Use Case
+            if (answers.manual && (answers.manual.includes('viele') || answers.manual.includes('zeitintensiv') || answers.manual.includes('wiederhol'))) {
+                useCases.push({
+                    id: 'process-ai',
+                    name: '⚙️ Intelligente Prozessautomatisierung',
+                    description: 'KI-basierte Automatisierung wiederkehrender Geschäftsprozesse und Workflows.',
+                    category: 'Interne Prozesse',
+                    potential: 'hoch',
                     effort: 'hoch',
                     priority: 'mittel',
-                    category: 'Interne Prozesse'
+                    benefits: ['Operative Effizienz', 'Fehlerreduktion', 'Kosteneinsparungen'],
+                    implementation: '8-16 Wochen'
                 });
             }
             
-            // Check for data analysis potential
-            if (data.includes('regelmäßig') || data.includes('viel') || data.includes('zeit')) {
+            // Knowledge Management Use Case
+            if (answers.knowledge && (answers.knowledge.includes('dezentral') || answers.knowledge.includes('nicht strukturiert') || answers.knowledge.includes('schwer findbar'))) {
                 useCases.push({
-                    id: 6,
-                    name: 'KI-gestützte Datenanalyse',
-                    description: 'Automatische Analyse und Visualisierung von Daten, Erkennung von Mustern und Trends',
-                    potential: 'hoch',
-                    effort: 'mittel',
-                    priority: 'hoch',
-                    category: 'Interne Prozesse'
-                });
-            }
-            
-            // Check for report automation potential
-            if (reports.includes('ja') || reports.includes('manuell') || reports.includes('viel')) {
-                useCases.push({
-                    id: 7,
-                    name: 'Automatisierte Berichtserstellung',
-                    description: 'KI-gestützte Generierung von standardisierten Berichten, automatische Datenaufbereitung',
+                    id: 'knowledge-ai',
+                    name: '🧠 KI-gestütztes Wissensmanagement',
+                    description: 'Intelligente Wissensbank mit automatischer Kategorisierung und semantischer Suche.',
+                    category: 'Interne Prozesse',
                     potential: 'mittel',
-                    effort: 'niedrig',
-                    priority: 'hoch',
-                    category: 'Interne Prozesse'
+                    effort: 'hoch',
+                    priority: 'niedrig',
+                    benefits: ['Besserer Wissenstransfer', 'Schnellere Informationssuche', 'Zentrale Wissensbasis'],
+                    implementation: '12-20 Wochen'
                 });
             }
             
-            // Add a general process automation use case based on manual processes
-            if (manual.includes('viele') || manual.includes('mehrere') || manual.includes('zeitintensiv')) {
-                useCases.push({
-                    id: 8,
-                    name: 'Prozessautomatisierung mit KI',
-                    description: 'Identifikation und Automatisierung wiederkehrender Prozesse mit Hilfe von KI',
-                    potential: 'hoch',
-                    effort: 'mittel',
-                    priority: 'hoch',
-                    category: 'Interne Prozesse'
-                });
-            }
-            
-            // If no use cases were identified, add generic ones
+            // Ensure we have at least some use cases
             if (useCases.length === 0) {
                 useCases.push({
-                    id: 9,
-                    name: 'KI-gestützte Prozessoptimierung',
-                    description: 'Identifikation und Optimierung von Geschäftsprozessen mit Hilfe von KI-Analyse',
+                    id: 'general-ai',
+                    name: '🚀 Allgemeine KI-Integration',
+                    description: 'Identifikation und Implementierung von KI-Lösungen basierend auf spezifischen Geschäftsanforderungen.',
+                    category: 'Allgemein',
                     potential: 'mittel',
                     effort: 'mittel',
                     priority: 'mittel',
-                    category: 'Interne Prozesse'
-                });
-                
-                useCases.push({
-                    id: 10,
-                    name: 'Intelligente Dokumentenverarbeitung',
-                    description: 'Automatische Extraktion von Informationen aus Dokumenten mit KI',
-                    potential: 'hoch',
-                    effort: 'niedrig',
-                    priority: 'hoch',
-                    category: 'Interne Prozesse'
+                    benefits: ['Digitale Transformation', 'Wettbewerbsvorteile', 'Zukunftsfähigkeit'],
+                    implementation: '6-12 Wochen'
                 });
             }
             
-            // Generate results HTML
-            generateResults();
+            // Sort by priority
+            const priorityOrder = { 'hoch': 3, 'mittel': 2, 'niedrig': 1 };
+            useCases.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
             
-            console.log("Use cases generated:", useCases);
+            console.log('Generated use cases:', useCases);
+            displayResults();
         }
         
-        // Generate results HTML
-        function generateResults() {
-            const resultsContainer = document.getElementById('results-content');
+        // Display results
+        function displayResults() {
+            const container = document.getElementById('resultsContent');
             let html = '';
             
-            // Group use cases by category
+            html += '<div class="success-animation">';
+            html += '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">';
+            html += '<circle class="checkmark__circle" fill="none" stroke="#00FFFF" stroke-width="2" stroke-miterlimit="10" cx="26" cy="26" r="25"/>';
+            html += '<path class="checkmark__check" fill="none" stroke="#00FFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>';
+            html += '</svg>';
+            html += '<h3 style="color: #00BFBF; margin-top: 20px;">Analyse abgeschlossen!</h3>';
+            html += '<p>Basierend auf Ihren Antworten haben wir folgende KI-Potenziale identifiziert:</p>';
+            html += '</div>';
+            
+            // Group by category
             const categories = {};
             useCases.forEach(useCase => {
                 if (!categories[useCase.category]) {
@@ -853,324 +911,354 @@
                 categories[useCase.category].push(useCase);
             });
             
-            // Generate HTML for each category
-            for (const category in categories) {
-                html += `<div class="result-card">
-                            <h3>${category}</h3>`;
-                
+            // Display use cases by category
+            Object.keys(categories).forEach(category => {
+                html += `<h3>${category}</h3>`;
                 categories[category].forEach(useCase => {
-                    html += `<div class="use-case">
-                                <h4>${useCase.name}</h4>
-                                <p>${useCase.description}</p>
-                                <div class="rating">
-                                    <span>Potenzial: ${useCase.potential}</span>
-                                    <span>Aufwand: ${useCase.effort}</span>
-                                    <span>Priorität: ${useCase.priority}</span>
-                                </div>
-                            </div>`;
+                    html += `<div class="use-case">`;
+                    html += `<h4>${useCase.name}</h4>`;
+                    html += `<p>${useCase.description}</p>`;
+                    html += `<div class="rating">`;
+                    html += `<span class="rating-badge ${useCase.potential}">Potenzial: ${useCase.potential}</span>`;
+                    html += `<span class="rating-badge ${useCase.effort}">Aufwand: ${useCase.effort}</span>`;
+                    html += `<span class="rating-badge ${useCase.priority}">Priorität: ${useCase.priority}</span>`;
+                    html += `</div>`;
+                    html += `<p><strong>Implementierungszeit:</strong> ${useCase.implementation}</p>`;
+                    html += `<p><strong>Vorteile:</strong> ${useCase.benefits.join(', ')}</p>`;
+                    html += `</div>`;
                 });
-                
-                html += `</div>`;
-            }
-            
-            // Add summary table
-            html += `<h3>Übersicht der identifizierten Use Cases</h3>
-                    <table>
-                        <tr>
-                            <th>Use Case</th>
-                            <th>Kategorie</th>
-                            <th>Potenzial</th>
-                            <th>Aufwand</th>
-                            <th>Priorität</th>
-                        </tr>`;
-            
-            useCases.forEach(useCase => {
-                html += `<tr>
-                            <td>${useCase.name}</td>
-                            <td>${useCase.category}</td>
-                            <td>${useCase.potential}</td>
-                            <td>${useCase.effort}</td>
-                            <td>${useCase.priority}</td>
-                        </tr>`;
             });
             
-            html += `</table>`;
+            // Summary table
+            html += '<h3>📋 Zusammenfassung aller Use Cases</h3>';
+            html += '<table>';
+            html += '<thead><tr><th>Use Case</th><th>Kategorie</th><th>Potenzial</th><th>Aufwand</th><th>Priorität</th><th>Zeitrahmen</th></tr></thead>';
+            html += '<tbody>';
+            useCases.forEach(useCase => {
+                html += `<tr>`;
+                html += `<td>${useCase.name}</td>`;
+                html += `<td>${useCase.category}</td>`;
+                html += `<td><span class="rating-badge ${useCase.potential}">${useCase.potential}</span></td>`;
+                html += `<td><span class="rating-badge ${useCase.effort}">${useCase.effort}</span></td>`;
+                html += `<td><span class="rating-badge ${useCase.priority}">${useCase.priority}</span></td>`;
+                html += `<td>${useCase.implementation}</td>`;
+                html += `</tr>`;
+            });
+            html += '</tbody></table>';
             
-            // Add recommendation
-            html += `<div class="result-card">
-                        <h3>Empfehlung</h3>
-                        <p>Basierend auf Ihren Antworten empfehlen wir, mit dem Use Case "${useCases[0].name}" zu beginnen.</p>
-                        <p>Dieser Use Case bietet ein ausgewogenes Verhältnis zwischen Potenzial und Aufwand und kann als Einstieg in Ihre KI-Journey dienen.</p>
-                    </div>`;
+            // Recommendation
+            if (useCases.length > 0) {
+                const topUseCase = useCases[0];
+                html += '<div style="background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c8 100%); padding: 20px; border-radius: 10px; border: 2px solid #00cc00; margin: 20px 0;">';
+                html += '<h3 style="color: #006600;">🏆 Unsere Empfehlung</h3>';
+                html += `<p>Basierend auf Ihrer Analyse empfehlen wir, mit <strong>"${topUseCase.name}"</strong> zu beginnen.</p>`;
+                html += '<p>Dieser Use Case bietet das beste Verhältnis zwischen Potenzial, Aufwand und schnellen Ergebnissen.</p>';
+                html += '</div>';
+            }
             
-            // Update results container
-            resultsContainer.innerHTML = html;
+            container.innerHTML = html;
             
-            console.log("Results generated and displayed");
+            // Populate planning form dropdown
+            populatePlanningDropdown();
         }
         
-        // Proceed to planning phase
-        function proceedToPlanning() {
-            console.log("Proceeding to planning phase...");
+        // Populate planning dropdown
+        function populatePlanningDropdown() {
+            const select = document.getElementById('promising');
+            select.innerHTML = '<option value="">Bitte auswählen...</option>';
             
-            // Populate use case dropdown
-            populateUseCaseDropdown();
-            
-            // Show planning phase
-            showPhase('planning');
-            
-            console.log("Planning phase initialized");
-        }
-        
-        // Populate use case dropdown
-        function populateUseCaseDropdown() {
-            const dropdown = document.getElementById('promising');
-            
-            console.log("Populating use case dropdown with", useCases.length, "options");
-            
-            // Clear options
-            dropdown.innerHTML = '<option value="" selected disabled>Bitte auswählen...</option>';
-            
-            // Add use cases
             useCases.forEach(useCase => {
                 const option = document.createElement('option');
                 option.value = useCase.id;
                 option.textContent = useCase.name;
-                dropdown.appendChild(option);
+                select.appendChild(option);
             });
-            
-            console.log("Dropdown populated successfully");
         }
         
         // Generate final report
-        function generateReport() {
-            console.log("Generating final report...");
+        function generateFinalReport() {
+            console.log('Generating final report...');
             
-            // Check if form is valid
-            const fieldIds = ['promising', 'result', 'support', 'compatibility', 'success'];
-            let isValid = true;
-            
-            fieldIds.forEach(id => {
-                if (!validateField(id)) {
-                    isValid = false;
-                }
-            });
-            
-            if (!isValid) {
+            if (!validateForm('planningForm')) {
                 alert('Bitte füllen Sie alle erforderlichen Felder aus.');
                 return;
             }
             
-            // Get selected use case
-            const useCaseId = parseInt(document.getElementById('promising').value);
-            const selectedUseCase = useCases.find(uc => uc.id === parseInt(useCaseId));
+            // Collect planning data
+            const form = document.getElementById('planningForm');
+            const formData = new FormData(form);
+            
+            planningData = {};
+            for (let [key, value] of formData.entries()) {
+                planningData[key] = value.trim();
+            }
+            
+            // Find selected use case
+            selectedUseCase = useCases.find(uc => uc.id === planningData.promising);
             
             if (!selectedUseCase) {
-                console.error("Selected use case not found. ID:", useCaseId, "Available use cases:", useCases);
-                alert('Fehler beim Abrufen des ausgewählten Use Cases. Bitte versuchen Sie es erneut.');
+                alert('Fehler beim Laden des ausgewählten Use Cases.');
                 return;
             }
             
-            console.log("Selected use case:", selectedUseCase);
+            console.log('Planning data:', planningData);
+            console.log('Selected use case:', selectedUseCase);
             
-            // Get answers
-            const result = document.getElementById('result').value;
-            const support = document.getElementById('support').value;
-            const compatibility = document.getElementById('compatibility').value;
-            const success = document.getElementById('success').value;
+            // Generate and display final report
+            displayFinalReport();
             
-            // Generate report
-            const reportContainer = document.getElementById('report-content');
-            let html = '';
+            // Enable final phase
+            currentPhase = Math.max(currentPhase, 4);
+            document.getElementById('btnPhase4').classList.remove('disabled');
             
-            // Company info
-            html += `<div class="result-card">
-                        <h3>Unternehmensprofil</h3>
-                        <p><strong>Unternehmen:</strong> ${companyName}</p>
-                        <p><strong>Erstellt am:</strong> ${new Date().toLocaleDateString('de-DE')}</p>
-                    </div>`;
+            // Show final report
+            showPhase(4);
             
-            // Selected use case
-            html += `<div class="result-card">
-                        <h3>Ausgewählter Use Case</h3>
-                        <h4>${selectedUseCase.name}</h4>
-                        <p>${selectedUseCase.description}</p>
-                        <div class="rating">
-                            <span>Potenzial: ${selectedUseCase.potential}</span>
-                            <span>Aufwand: ${selectedUseCase.effort}</span>
-                            <span>Priorität: ${selectedUseCase.priority}</span>
-                        </div>
-                    </div>`;
-            
-            // Implementation plan
-            html += `<div class="result-card">
-                        <h3>Umsetzungsplan</h3>
-                        <p><strong>30-Tage-Ziel:</strong> ${result}</p>
-                        <p><strong>Interne Unterstützung:</strong> ${support}</p>
-                        <p><strong>Systemkompatibilität:</strong> ${compatibility}</p>
-                        <p><strong>Erfolgskriterien:</strong> ${success}</p>
-                    </div>`;
-            
-            // Next steps
-            html += `<div class="result-card">
-                        <h3>Nächste Schritte</h3>
-                        <ol>
-                            <li>Projekt-Kickoff mit allen Beteiligten</li>
-                            <li>Detaillierte Anforderungsanalyse</li>
-                            <li>Auswahl der passenden KI-Technologie</li>
-                            <li>Entwicklung eines Prototyps</li>
-                            <li>Testphase und Anpassung</li>
-                            <li>Einführung und Training</li>
-                        </ol>
-                    </div>`;
-            
-            // Timeline
-            html += `<div class="result-card">
-                        <h3>Zeitplan</h3>
-                        <table>
-                            <tr>
-                                <th>Woche</th>
-                                <th>Aktivität</th>
-                            </tr>
-                            <tr>
-                                <td>Woche 1</td>
-                                <td>Kickoff und Anforderungsanalyse</td>
-                            </tr>
-                            <tr>
-                                <td>Woche 2</td>
-                                <td>Technologie-Auswahl und Konzeption</td>
-                            </tr>
-                            <tr>
-                                <td>Woche 3</td>
-                                <td>Prototyp-Entwicklung</td>
-                            </tr>
-                            <tr>
-                                <td>Woche 4</td>
-                                <td>Test und Anpassung</td>
-                            </tr>
-                            <tr>
-                                <td>Tag 30</td>
-                                <td>Präsentation des Ergebnisses</td>
-                            </tr>
-                        </table>
-                    </div>`;
-            
-            // Update report container
-            reportContainer.innerHTML = html;
-            
-            // Show report
-            showPhase('final-report');
-            
-            console.log("Final report generated and displayed");
+            console.log('Final report generated successfully');
         }
         
-        // Download PDF function
-        function downloadPDF() {
-            console.log("Preparing PDF download...");
+        // Display final report
+        function displayFinalReport() {
+            const container = document.getElementById('finalReportContent');
+            const today = new Date().toLocaleDateString('de-DE');
             
-            // Get report content
-            const reportContent = document.getElementById('report-content').innerHTML;
+            let html = '';
             
-            // Create HTML content for PDF
-            const html = `<!DOCTYPE html>
-                <html>
-                <head>
-                    <title>TYQUA KI Starter KIT - Bericht</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                            color: #333;
-                            max-width: 800px;
-                            margin: 0 auto;
-                            padding: 20px;
-                        }
-                        h1, h2, h3, h4 {
-                            color: #20B2AA;
-                        }
-                        .header {
-                            text-align: center;
-                            margin-bottom: 30px;
-                            padding: 20px;
-                            background-color: #000000;
-                            color: #4DD0E1;
-                        }
-                        .header h1 {
-                            color: #4DD0E1;
-                        }
-                        .logo {
-                            font-size: 40px;
-                            font-weight: bold;
-                            color: #4DD0E1;
-                            margin-bottom: 15px;
-                        }
-                        .result-card {
-                            margin: 20px 0;
-                            padding: 15px;
-                            border-left: 5px solid #20B2AA;
-                            background: #f9f9f9;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin: 15px 0;
-                        }
-                        th, td {
-                            padding: 8px;
-                            text-align: left;
-                            border-bottom: 1px solid #ddd;
-                        }
-                        th {
-                            background-color: #f2f2f2;
-                        }
-                        .rating span {
-                            display: inline-block;
-                            background: #4DD0E1;
-                            color: white;
-                            padding: 3px 8px;
-                            border-radius: 12px;
-                            font-size: 14px;
-                            margin-right: 10px;
-                            margin-top: 5px;
-                        }
-                        footer {
-                            margin-top: 40px;
-                            border-top: 1px solid #ddd;
-                            padding-top: 20px;
-                            text-align: center;
-                            font-size: 14px;
-                            color: #777;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div class="logo">TYQUA</div>
-                        <h1>KI Starter KIT - Analysebericht</h1>
-                    </div>
-                    ${reportContent}
-                    <footer>
-                        <p>© 2025 TYQUA - KI Starter KIT Analysetool</p>
-                        <p>Erstellt am ${new Date().toLocaleDateString('de-DE')}</p>
-                    </footer>
-                </body>
-                </html>`;
+            // Header
+            html += '<div style="text-align: center; background: linear-gradient(135deg, #000 0%, #333 100%); color: #00FFFF; padding: 30px; border-radius: 15px; margin-bottom: 30px;">';
+            html += '<div style="font-size: 36px; font-weight: bold; margin-bottom: 15px;">TYQUA</div>';
+            html += '<h3>KI Starter KIT - Abschlussbericht</h3>';
+            html += `<p>Erstellt am: ${today}</p>`;
+            html += '</div>';
             
-            // Create blob
-            const blob = new Blob([html], { type: 'text/html' });
+            // Company Overview
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">🏢 Unternehmensprofil</h3>';
+            html += `<p><strong>Unternehmen:</strong> ${interviewData.business}</p>`;
+            html += `<p><strong>Zielgruppe:</strong> ${interviewData.customers}</p>`;
+            html += `<p><strong>Akquisitionsstrategie:</strong> ${interviewData.acquisition}</p>`;
+            html += '</div>';
             
-            // Create download link
+            // Selected Use Case
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">🎯 Ausgewählter Use Case</h3>';
+            html += `<h4>${selectedUseCase.name}</h4>`;
+            html += `<p>${selectedUseCase.description}</p>`;
+            html += '<div style="margin: 15px 0;">';
+            html += `<span class="rating-badge ${selectedUseCase.potential}">Potenzial: ${selectedUseCase.potential}</span> `;
+            html += `<span class="rating-badge ${selectedUseCase.effort}">Aufwand: ${selectedUseCase.effort}</span> `;
+            html += `<span class="rating-badge ${selectedUseCase.priority}">Priorität: ${selectedUseCase.priority}</span>`;
+            html += '</div>';
+            html += `<p><strong>Implementierungszeit:</strong> ${selectedUseCase.implementation}</p>`;
+            html += `<p><strong>Erwartete Vorteile:</strong></p><ul>`;
+            selectedUseCase.benefits.forEach(benefit => {
+                html += `<li>${benefit}</li>`;
+            });
+            html += '</ul></div>';
+            
+            // Implementation Plan
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">📋 Umsetzungsplan</h3>';
+            html += `<p><strong>30-Tage-Ziel:</strong> ${planningData.result}</p>`;
+            html += `<p><strong>Interne Unterstützung:</strong> ${planningData.support}</p>`;
+            html += `<p><strong>Systemkompatibilität:</strong> ${planningData.compatibility}</p>`;
+            html += `<p><strong>Erfolgskriterien:</strong> ${planningData.success}</p>`;
+            html += '</div>';
+            
+            // Next Steps
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">🚀 Nächste Schritte</h3>';
+            html += '<ol>';
+            html += '<li><strong>Woche 1:</strong> Projekt-Kickoff und Stakeholder-Alignment</li>';
+            html += '<li><strong>Woche 2:</strong> Detaillierte Anforderungsanalyse und Technologie-Evaluation</li>';
+            html += '<li><strong>Woche 3-4:</strong> Prototyp-Entwicklung und initiale Tests</li>';
+            html += '<li><strong>Woche 5-6:</strong> Iterative Verbesserung und User-Feedback</li>';
+            html += '<li><strong>Woche 7-8:</strong> Finale Implementierung und Team-Training</li>';
+            html += '</ol>';
+            html += '</div>';
+            
+            // Success Metrics
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">📊 Erfolgsmessung</h3>';
+            html += '<table>';
+            html += '<tr><th>Metrik</th><th>Baseline</th><th>Ziel (30 Tage)</th><th>Langfristig (6 Monate)</th></tr>';
+            html += '<tr><td>Zeitersparnis</td><td>0%</td><td>20-30%</td><td>50-70%</td></tr>';
+            html += '<tr><td>Qualitätsverbesserung</td><td>Baseline</td><td>+15%</td><td>+40%</td></tr>';
+            html += '<tr><td>Nutzerzufriedenheit</td><td>Aktueller Wert</td><td>+20%</td><td>+50%</td></tr>';
+            html += '<tr><td>ROI</td><td>0%</td><td>Break-even</td><td>200-300%</td></tr>';
+            html += '</table>';
+            html += '</div>';
+            
+            // Investment Overview
+            html += '<div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #00FFFF;">';
+            html += '<h3 style="color: #00BFBF;">💰 Investitionsübersicht</h3>';
+            const effortCosts = {
+                'niedrig': { initial: '5.000-15.000€', monthly: '500-1.500€' },
+                'mittel': { initial: '15.000-40.000€', monthly: '1.500-4.000€' },
+                'hoch': { initial: '40.000-100.000€', monthly: '4.000-10.000€' }
+            };
+            const costs = effortCosts[selectedUseCase.effort];
+            html += `<p><strong>Initiale Investition:</strong> ${costs.initial}</p>`;
+            html += `<p><strong>Laufende Kosten:</strong> ${costs.monthly}/Monat</p>`;
+            html += '<p><strong>Erwarteter ROI:</strong> 200-400% in den ersten 12 Monaten</p>';
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+        
+        // Download report
+        function downloadReport() {
+            console.log('Downloading report...');
+            
+            const reportContent = document.getElementById('finalReportContent').innerHTML;
+            const today = new Date().toLocaleDateString('de-DE');
+            
+            const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="de">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>TYQUA KI Starter KIT - Bericht</title>
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        max-width: 800px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background: white;
+                    }
+                    h1, h2, h3, h4 {
+                        color: #00BFBF;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 15px 0;
+                    }
+                    th, td {
+                        padding: 12px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    th {
+                        background-color: #f8f9fa;
+                        color: #00BFBF;
+                        font-weight: bold;
+                    }
+                    .rating-badge {
+                        background: #00FFFF;
+                        color: #000;
+                        padding: 3px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        margin-right: 5px;
+                    }
+                    .rating-badge.high { background: #00ff00; }
+                    .rating-badge.medium { background: #ffff00; color: #000; }
+                    .rating-badge.low { background: #ff6b6b; color: white; }
+                    ul, ol {
+                        padding-left: 20px;
+                    }
+                    li {
+                        margin: 5px 0;
+                    }
+                    @media print {
+                        body { margin: 0; padding: 15px; }
+                        .no-print { display: none; }
+                    }
+                </style>
+            </head>
+            <body>
+                ${reportContent}
+                <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #00FFFF; text-align: center; color: #777;">
+                    <p>© 2025 TYQUA - KI Starter KIT Analysetool</p>
+                    <p>Bericht erstellt am ${today}</p>
+                </div>
+            </body>
+            </html>`;
+            
+            // Create and download file
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `TYQUA_KI_Starter_KIT_Bericht_${new Date().toISOString().slice(0,10)}.html`;
+            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            alert('Der Bericht wurde erfolgreich als HTML heruntergeladen. Sie können ihn in Ihrem Browser öffnen und über die Druckfunktion (Strg+P / Cmd+P) als PDF speichern.');
+            // Show success message
+            alert('✅ Bericht erfolgreich heruntergeladen!\n\nSie können die HTML-Datei in Ihrem Browser öffnen und über "Drucken" als PDF speichern.');
             
-            console.log("PDF download completed");
+            console.log('Report downloaded successfully');
         }
+        
+        // Add some utility functions for better user experience
+        document.addEventListener('keydown', function(e) {
+            // Enable Enter key to submit forms
+            if (e.key === 'Enter' && e.ctrlKey) {
+                if (currentPhase === 1) {
+                    submitInterview();
+                } else if (currentPhase === 3) {
+                    generateFinalReport();
+                }
+            }
+        });
+        
+        // Auto-save functionality (optional)
+        let autoSaveTimer;
+        function autoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                const currentData = {
+                    interviewData,
+                    useCases,
+                    planningData,
+                    currentPhase
+                };
+                localStorage.setItem('tyqua_ki_tool_data', JSON.stringify(currentData));
+                console.log('Data auto-saved');
+            }, 5000);
+        }
+        
+        // Add event listeners for auto-save
+        document.addEventListener('input', autoSave);
+        
+        // Load saved data on page load
+        window.addEventListener('load', function() {
+            const savedData = localStorage.getItem('tyqua_ki_tool_data');
+            if (savedData && confirm('Möchten Sie Ihre vorherigen Eingaben wiederherstellen?')) {
+                try {
+                    const data = JSON.parse(savedData);
+                    interviewData = data.interviewData || {};
+                    useCases = data.useCases || [];
+                    planningData = data.planningData || {};
+                    currentPhase = data.currentPhase || 1;
+                    
+                    // Restore form values
+                    Object.keys(interviewData).forEach(key => {
+                        const field = document.getElementById(key);
+                        if (field) field.value = interviewData[key];
+                    });
+                    
+                    if (useCases.length > 0) {
+                        displayResults();
+                        document.getElementById('btnPhase2').classList.remove('disabled');
+                        document.getElementById('btnPhase3').classList.remove('disabled');
+                    }
+                    
+                    console.log('Previous session restored');
+                } catch (error) {
+                    console.error('Error restoring saved data:', error);
+                }
+            }
+        });
+        
+        console.log('TYQUA KI Analysetool fully loaded and ready');
     </script>
 </body>
 </html>
